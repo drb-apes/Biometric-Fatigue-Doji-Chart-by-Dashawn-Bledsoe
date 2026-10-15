@@ -45,6 +45,8 @@ class SportScenario:
     tip_pool: Decimal
     webhook_ms: int
     activation: str
+    sensor_context: str
+    fatigue_interpretation: str
     candles: tuple[Candle, ...]
 
 
@@ -72,6 +74,10 @@ SCENARIOS = {
         Decimal("25000"),
         460,
         "2D broadcast lower-third, Jumbotron ticker, and geofenced QR offer",
+        "steering torque, neck lateral G-force (up to 5.5G), core temperature, "
+        "and brake pressure at a synthetic 1,000 Hz profile",
+        "5.2G cornering with a compressed body signals steering micro-drift "
+        "and exhaustion",
         (
             _candle("Lap 47", "78", "90", "70", "76", "5.0G cornering"),
             _candle("Lap 48", "62", "94", "30", "63", "5.2G cornering"),
@@ -81,7 +87,12 @@ SCENARIOS = {
         "Boxing",
         Decimal("40000"),
         420,
-        "PPV lower-third and $1.00 energy-drink coupon",
+        "Monster Energy Impact Alert on the PPV side banner and $1.00 "
+        "energy-drink coupon",
+        "smart-glove impact, mouthguard rotational acceleration, and "
+        "cardiac telemetry at a synthetic 1,000 Hz profile",
+        "Round 9 impact followed by recovery collapse; heart rate remains "
+        "at 178 BPM",
         (
             _candle("Round 8", "80", "91", "68", "74", "38g glove impact"),
             _candle("Round 9", "60", "96", "28", "60.5", "42g glove impact"),
@@ -91,7 +102,11 @@ SCENARIOS = {
         "American Football",
         Decimal("50000"),
         480,
-        "Stadium Jumbotron, TV lower-third, and QR offer",
+        "McDonald's stadium Jumbotron, TV lower-third, and QR offer",
+        "shoulder-pad collision force, cleat acceleration, and late-game "
+        "two-minute-drill HRV at a synthetic 1,000 Hz profile",
+        "after six consecutive plays, an 18.5 mph sprint coincides with a "
+        "0.4-point compressed body",
         (
             _candle("Play 5", "76", "90", "66", "70", "17.8 mph sprint"),
             _candle("Play 6", "61", "95", "25", "61.4", "18.5 mph sprint"),
@@ -101,7 +116,11 @@ SCENARIOS = {
         "Basketball",
         Decimal("30000"),
         410,
-        "2D broadcast lower-third and venue ticker",
+        "Nike 2D broadcast lower-third and venue ticker",
+        "insole jump force and landing impact, waist IMU deceleration, and "
+        "cardiac strain at a synthetic 1,000 Hz profile",
+        "after 44 minutes, readiness barely moves from 88.4 to 88.6 despite "
+        "a 38-inch jump",
         (
             _candle("Minute 43", "89.1", "96", "82", "88.0", "37-inch vertical"),
             _candle("Minute 44", "88.4", "98", "82", "88.6", "38-inch vertical"),
@@ -151,6 +170,8 @@ def simulate(
     lines = [
         f"\n=== {scenario.name} | offline simulation ===",
         "OHLC values use a shared normalized readiness/stress index (0–100).",
+        f"Synthetic sensor profile: {scenario.sensor_context}.",
+        f"Fatigue interpretation: {scenario.fatigue_interpretation}.",
     ]
     doji_found = False
     for candle in scenario.candles:
